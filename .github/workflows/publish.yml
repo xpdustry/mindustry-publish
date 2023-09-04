@@ -41,8 +41,8 @@ jobs:
       
       - name: Set up Xpdustry Repository
         run: |
-          cat ./xpdustry-helper/publish.gradle >> ./Mindustry/build.gradle
-          cat ./xpdustry-helper/publish.gradle >> ./Arc/build.gradle
+          cat ./xpdustry-helper/scripts/mindustry-publish.gradle >> ./Mindustry/build.gradle
+          cat ./xpdustry-helper/scripts/arc-publish.gradle >> ./Arc/build.gradle
 
       - name: Build, Test and Publish Mindustry and Arc
         env:
