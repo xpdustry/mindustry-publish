@@ -1,0 +1,24 @@
+allprojects {
+    apply plugin: 'maven-publish'
+
+
+    signing {
+        def signingKey = findProperty("signingKey")
+        def signingPassword = findProperty("signingPassword")
+        useInMemoryPgpKeys(signingKey, signingPassword)
+        sign publishing.publications
+    }
+
+    publishing {
+        repositories {
+            maven {
+                name = 'xpdustry'
+                url = 'https://maven.xpdustry.com/anuken-releases/'
+                credentials {
+                    username = findProperty("xpdustryUsername")
+                    password = findProperty("xpdustryPassword")
+                }
+            }
+        }
+    }
+}
