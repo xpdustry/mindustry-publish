@@ -38,7 +38,7 @@ jobs:
           path: arc
       
       - name: Set up Xpdustry Repository
-      - run: |
+        run: |
           cat ./xpdustry-helper/publish.gradle >> ./mindustry/build.gradle
           cat ./xpdustry-helper/publish.gradle >> ./arc/build.gradle
 
