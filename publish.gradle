@@ -1,6 +1,6 @@
 allprojects {
     apply plugin: 'maven-publish'
-
+    apply plugin: 'signing'
 
     signing {
         def signingKey = findProperty("signingKey")
