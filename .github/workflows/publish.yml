@@ -12,7 +12,7 @@ on:
 
 jobs:
   publish:
-    name: "Publish Mindustry and Arc"
+    name: Publish Mindustry and Arc
     runs-on: ubuntu-latest
     steps:
       - name: Checkout Repository
@@ -30,19 +30,19 @@ jobs:
         with:
           repository: 'Anuken/Mindustry'
           ref: ${{ github.event.inputs.version }}
-          path: mindustry
+          path: Mindustry
 
       - name: Checkout Arc
         uses: actions/checkout@v4
         with:
           repository: 'Anuken/Arc'
           ref: ${{ github.event.inputs.version }}
-          path: arc
+          path: Arc
       
       - name: Set up Xpdustry Repository
         run: |
-          cat ./xpdustry-helper/publish.gradle >> ./mindustry/build.gradle
-          cat ./xpdustry-helper/publish.gradle >> ./arc/build.gradle
+          cat ./xpdustry-helper/publish.gradle >> ./Mindustry/build.gradle
+          cat ./xpdustry-helper/publish.gradle >> ./Arc/build.gradle
 
       - name: Build, Test and Publish Mindustry and Arc
         env:
@@ -51,7 +51,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: "${{ secrets.XPDUSTRY_MAVEN_SIGNING_KEY }}"
           ORG_GRADLE_PROJECT_signingPassword: "${{ secrets.XPDUSTRY_MAVEN_SIGNING_PASSWORD }}"
         run: |
-          cd ./mindustry 
+          cd ./Mindustry 
           ./gradlew jar test publishAllPublicationsToXpdustryRepository
-          cd ../arc
+          cd ../Arc
           ./gradlew jar test publishAllPublicationsToXpdustryRepository
