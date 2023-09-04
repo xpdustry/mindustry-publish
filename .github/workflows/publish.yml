@@ -41,8 +41,8 @@ jobs:
       
       - name: Set up Xpdustry Repository
         run: |
-          cat ./xpdustry-helper/scripts/mindustry-publish.gradle >> ./Mindustry/build.gradle
-          cat ./xpdustry-helper/scripts/arc-publish.gradle >> ./Arc/build.gradle
+          cat ./xpdustry-helper/scripts/publish.gradle >> ./Mindustry/build.gradle
+          cat ./xpdustry-helper/scripts/publish.gradle >> ./Arc/build.gradle
 
       - name: Build, Test and Publish Mindustry and Arc
         env:
@@ -52,6 +52,6 @@ jobs:
           ORG_GRADLE_PROJECT_signingPassword: "${{ secrets.XPDUSTRY_MAVEN_SIGNING_PASSWORD }}"
         run: |
           cd ./Mindustry 
-          ./gradlew jar test publishMavenPublicationToXpdustryRepository
+          ./gradlew jar test publish
           cd ../Arc
-          ./gradlew jar test publishMavenPublicationToXpdustryRepository
+          ./gradlew jar test publish
