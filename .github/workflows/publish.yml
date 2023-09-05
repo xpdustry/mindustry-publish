@@ -60,8 +60,10 @@ jobs:
       - name: Build, Test and Install Mindustry and Arc
         run: |
           cd ./Arc
+          echo ";apply plugin: 'maven-publish';" >> ./build.gradle
           ./gradlew build install
-          cd ../Mindustry 
+          cd ../Mindustry
+          echo ";apply plugin: 'maven-publish';" >> ./build.gradle
           ./gradlew build install
 
       - name: Upload Updated Artifacts to S3
