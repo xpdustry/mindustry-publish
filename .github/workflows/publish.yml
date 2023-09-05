@@ -38,20 +38,33 @@ jobs:
           repository: 'Anuken/Arc'
           ref: ${{ github.event.inputs.version }}
           path: Arc
-      
-      - name: Set up Xpdustry Repository
-        run: |
-          cat ./xpdustry-helper/scripts/publish.gradle >> ./Mindustry/build.gradle
-          cat ./xpdustry-helper/scripts/publish.gradle >> ./Arc/build.gradle
 
-      - name: Build, Test and Publish Mindustry and Arc
+      - name: Install and Setup Minio CLI
+        run: |
+          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+            --create-dirs \
+            -o $HOME/minio-binaries/mc
+
+          chmod +x $HOME/minio-binaries/mc
+          export PATH=$PATH:$HOME/minio-binaries/
+
+          bash +o history
+          mc alias set xpdustry https://minio1.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+          bash -o history
+
+          mc cp -r xpdustry/maven-anuken-releases/ ~/.m2/repository
         env:
-          ORG_GRADLE_PROJECT_xpdustryUsername: "${{ secrets.XPDUSTRY_MAVEN_USERNAME }}"
-          ORG_GRADLE_PROJECT_xpdustryPassword: "${{ secrets.XPDUSTRY_MAVEN_PASSWORD }}"
-          ORG_GRADLE_PROJECT_signingKey: "${{ secrets.XPDUSTRY_MAVEN_SIGNING_KEY }}"
-          ORG_GRADLE_PROJECT_signingPassword: "${{ secrets.XPDUSTRY_MAVEN_SIGNING_PASSWORD }}"
+          MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
+          MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
+
+      - name: Build, Test and Install Mindustry and Arc
         run: |
           cd ./Arc
-          ./gradlew jar test publishToMavenLocal publishMavenPublicationToXpdustryRepository
+          ./gradlew build install
           cd ../Mindustry 
-          ./gradlew jar test publishMavenPublicationToXpdustryRepository
+          ./gradlew build install
+
+      - name: Upload Updated Artifacts to S3
+        run: |
+          # Upload the updated artifacts to S3
+          mc cp -r ~/.m2/repository/* xpdustry/maven-anuken-releases/
