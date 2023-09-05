@@ -60,9 +60,9 @@ jobs:
       - name: Build, Test and Install Mindustry and Arc
         run: |
           cd ./Arc
-          ./gradlew -xtest assemble publishToMavenLocal
+          ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest assemble publishToMavenLocal
           cd ../Mindustry
-          ./gradlew -xtest assemble publishToMavenLocal
+          ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest assemble publishToMavenLocal
 
       - name: Upload Updated Artifacts to S3
         run: |
