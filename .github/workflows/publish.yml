@@ -51,7 +51,7 @@ jobs:
           ORG_GRADLE_PROJECT_signingKey: "${{ secrets.XPDUSTRY_MAVEN_SIGNING_KEY }}"
           ORG_GRADLE_PROJECT_signingPassword: "${{ secrets.XPDUSTRY_MAVEN_SIGNING_PASSWORD }}"
         run: |
-          cd ./mindustry 
+          cd ./arc
           ./gradlew jar test publishMavenPublicationToXpdustryRepository
-          cd ../arc
+          cd ../mindustry 
           ./gradlew jar test publishMavenPublicationToXpdustryRepository
