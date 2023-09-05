@@ -1,4 +1,4 @@
-allprojects { project ->
+subprojects { project ->
     project.plugins.withType(MavenPublishPlugin) {
         project.apply plugin: 'signing'
 
