@@ -61,10 +61,10 @@ jobs:
         run: |
           cd ./Arc
           echo ";apply plugin: 'maven-publish';" >> ./build.gradle
-          ./gradlew build install
+          ./gradlew build publishToMavenLocal
           cd ../Mindustry
           echo ";apply plugin: 'maven-publish';" >> ./build.gradle
-          ./gradlew build install
+          ./gradlew build publishToMavenLocal
 
       - name: Upload Updated Artifacts to S3
         run: |
