@@ -52,7 +52,7 @@ jobs:
           mc alias set xpdustry https://minio1.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
           bash -o history
 
-          mc cp -r xpdustry/maven-anuken-releases ~/.m2/repository
+          mc cp -r xpdustry/maven-anuken-releases/ ~/.m2/repository
         env:
           MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
           MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
@@ -67,4 +67,4 @@ jobs:
       - name: Upload Updated Artifacts to S3
         run: |
           # Upload the updated artifacts to S3
-          mc cp -r ~/.m2/repository/* xpdustry/maven-anuken-releases
+          mc cp -r ~/.m2/repository/* xpdustry/maven-anuken-releases/
