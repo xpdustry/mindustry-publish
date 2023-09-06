@@ -63,10 +63,13 @@ jobs:
         run: |
           export JITPACK=true
           cd ./Arc
-          ./gradlew -Pversion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
+          sed -i "s/group = 'com.github.Anuken'/group = 'com.github.Anuken.Arc'/" build.gradle
+          sed -i "s/version = '1.0'/version = '$VERSION'/" build.gradle
+          ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
           cd ../Mindustry
+          sed -i "s/group = 'com.github.Anuken'/group = 'com.github.Anuken.Mindustry'/" build.gradle
           sed -i "s/^archash=.*/archash=$VERSION/" ./gradle.properties
-          ./gradlew -Pversion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
+          ./gradlew -Pbuildversion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
 
       - name: Upload Updated Artifacts to S3
         run: |
