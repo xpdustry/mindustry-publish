@@ -49,7 +49,9 @@ jobs:
         run: |
           export JITPACK=true
           cd ./Arc
+          cat ./xpdustry-helper/scripts/publish.gradle >> ./build.gradle
           ./gradlew -Pversion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal publishMavenPublicationToXpdustryRepository
           cd ../Mindustry
+          cat ./xpdustry-helper/scripts/publish.gradle >> ./build.gradle
           sed -i "s/^archash=.*/archash=$VERSION/" ./gradle.properties
           ./gradlew -Pversion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishMavenPublicationToXpdustryRepository
