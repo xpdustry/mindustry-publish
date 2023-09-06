@@ -61,7 +61,7 @@ jobs:
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: |
-          JITPACK=true
+          export JITPACK=true
           cd ./Arc
           ./gradlew -Pversion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
           cd ../Mindustry
