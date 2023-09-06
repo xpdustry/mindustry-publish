@@ -53,7 +53,11 @@ jobs:
           mc alias set xpdustry https://minio1.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
           bash -o history
 
-          mc cp -r xpdustry/maven-anuken-releases/ ~/.m2/repository
+          for object in $(mc ls -r xpdustry/maven-anuken-releases/ | grep -E 'maven-metadata-local\.xml$' | awk '{print $6}')
+          do
+            mkdir -p ~/.m2/repository/"$(dirname "$object")"
+            mc cp xpdustry/maven-anuken-releases/"$object" ~/.m2/repository/"$object"
+          done
         env:
           MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
           MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
