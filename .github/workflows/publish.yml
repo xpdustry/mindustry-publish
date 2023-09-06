@@ -62,10 +62,10 @@ jobs:
           VERSION: ${{ github.event.inputs.version }}
         run: |
           cd ./Arc
-          ./gradlew -Pversion=$VERSION -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
+          ./gradlew -Pversion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
           cd ../Mindustry
-          sed -i 's/^archash=.*/archash=$VERSION/' gradle.properties
-          ./gradlew -Pversion=$VERSION -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
+          sed -i "s/^archash=.*/archash=$VERSION/" ./gradle.properties
+          ./gradlew -Pversion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
 
       - name: Upload Updated Artifacts to S3
         run: |
