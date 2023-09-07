@@ -26,7 +26,7 @@ jobs:
         with:
           repository: 'Anuken/rhino'
           ref: ${{ github.event.inputs.version }}
-          path: Rhino
+          path: rhino
 
       - name: Install and Setup Minio CLI
         run: |
@@ -54,7 +54,7 @@ jobs:
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: |
-          cd ./Rhino
+          cd ./rhino
           sed -i "s/^version=.*/version=$VERSION/" ./gradle.properties
           ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
 
