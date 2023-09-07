@@ -51,7 +51,7 @@ jobs:
           for object in $(mc ls -r xpdustry/maven-anuken-releases/ | grep -E 'maven-metadata-local\.xml$' | awk '{print $6}')
           do
             mkdir -p ~/.m2/repository/"$(dirname "$object")"
-            mc cp xpdustry/maven-anuken-releases/"$object" ~/.m2/repository/"$object"
+            mc cp xpdustry/maven-anuken-releases/"$object" "$HOME"/.m2/repository/"$(dirname "$object")"/maven-metadata-local.xml
           done
         env:
           MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
