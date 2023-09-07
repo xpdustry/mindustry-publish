@@ -1,4 +1,4 @@
-name: Publish
+name: Publish Rhino
 
 on:
   workflow_dispatch:
@@ -12,7 +12,7 @@ on:
 
 jobs:
   publish:
-    name: Publish Mindustry and Arc
+    name: Publish Anuken Rhino
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK
@@ -21,19 +21,12 @@ jobs:
           java-version: ${{ github.event.inputs.java }}
           distribution: 'temurin'
 
-      - name: Checkout Mindustry
+      - name: Checkout Anuken Rhino
         uses: actions/checkout@v4
         with:
-          repository: 'Anuken/Mindustry'
+          repository: 'Anuken/rhino'
           ref: ${{ github.event.inputs.version }}
-          path: Mindustry
-
-      - name: Checkout Arc
-        uses: actions/checkout@v4
-        with:
-          repository: 'Anuken/Arc'
-          ref: ${{ github.event.inputs.version }}
-          path: Arc
+          path: Rhino
 
       - name: Install and Setup Minio CLI
         run: |
@@ -57,19 +50,13 @@ jobs:
           MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
           MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
 
-      - name: Build and Install Mindustry and Arc
+      - name: Build and Install Rhino
         env:
           VERSION: ${{ github.event.inputs.version }}
         run: |
-          export JITPACK=true
-          cd ./Arc
-          sed -i "s/group = 'com.github.Anuken'/group = 'com.github.Anuken.Arc'/" build.gradle
-          sed -i "s/version = '1.0'/version = '$VERSION'/" build.gradle
+          cd ./Rhino
+          sed -i "s/^version=.*/version=$VERSION/" ./gradle.properties
           ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
-          cd ../Mindustry
-          sed -i "s/group = 'com.github.Anuken'/group = 'com.github.Anuken.Mindustry'/" build.gradle
-          sed -i "s/^archash=.*/archash=$VERSION/" ./gradle.properties
-          ./gradlew -PpackageVersion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
 
       - name: Upload Updated Artifacts to S3
         run: |
