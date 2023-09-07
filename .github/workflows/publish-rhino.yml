@@ -81,6 +81,14 @@ jobs:
           mc alias set xpdustry https://minio1.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
           bash -o history
 
+          find ~/.m2/repository/ -type f -not -name "*.md5" -not -name "*.sha1" -not -name "*.sha256" -not -name "*.sha512" | while read -r file; do
+            echo "Generating hashes for $file"
+            md5sum "$file" > "${file}.md5"
+            sha1sum "$file" > "${file}.sha1"
+            sha256sum "$file" > "${file}.sha256"
+            sha512sum "$file" > "${file}.sha512"
+          done
+
           # Upload the updated artifacts to S3
           mc cp -r ~/.m2/repository/* xpdustry/maven-anuken-releases/
         env:
