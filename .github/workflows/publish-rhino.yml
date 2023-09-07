@@ -57,6 +57,7 @@ jobs:
           cd ./rhino
           sed -i "s/^version=.*/version=$VERSION/" gradle.properties
           ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest assemble publishToMavenLocal
+          find ~/.m2/repository/ -type f -name "maven-metadata-local.xml" -execdir mv {} maven-metadata.xml \;
 
       - name: Upload Updated Artifacts to S3
         run: |
