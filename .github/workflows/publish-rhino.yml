@@ -83,10 +83,10 @@ jobs:
 
           find ~/.m2/repository/ -type f -not -name "*.md5" -not -name "*.sha1" -not -name "*.sha256" -not -name "*.sha512" | while read -r file; do
             echo "Generating hashes for $file"
-            md5sum "$file" > "${file}.md5"
-            sha1sum "$file" > "${file}.sha1"
-            sha256sum "$file" > "${file}.sha256"
-            sha512sum "$file" > "${file}.sha512"
+            md5sum "$file" | awk '{print $1}' > "${file}.md5"
+            sha1sum "$file" | awk '{print $1}' > "${file}.sha1"
+            sha256sum "$file" | awk '{print $1}' > "${file}.sha256"
+            sha512sum "$file" | awk '{print $1}' > "${file}.sha512"
           done
 
           # Upload the updated artifacts to S3
