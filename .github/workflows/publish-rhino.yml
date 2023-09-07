@@ -55,8 +55,8 @@ jobs:
           VERSION: ${{ github.event.inputs.version }}
         run: |
           cd ./rhino
-          sed -i "s/^version=.*/version=$VERSION/" ./gradle.properties
-          ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest -xjavadoc assemble publishToMavenLocal
+          sed -i "s/^version=.*/version=$VERSION/" gradle.properties
+          ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest assemble publishToMavenLocal
 
       - name: Upload Updated Artifacts to S3
         run: |
