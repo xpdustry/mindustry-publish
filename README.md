@@ -35,5 +35,6 @@ repositories {
 
 ## Supported versions
 
-- V146
-- V145
+- v147
+- v146
+- v145
