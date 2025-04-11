@@ -79,7 +79,7 @@ jobs:
           sed -i "s/group = 'com.github.Anuken'/group = 'com.github.Anuken.Mindustry'/" build.gradle
           sed -i "s/^archash=.*/archash=$VERSION/" gradle.properties
           sed -i '/withJavadocJar()/s/^/\/\/ /' build.gradle
-          ./gradlew -PpackageVersion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest assemble publishToMavenLocal
+          ./gradlew -PpackageVersion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -Prelease -xtest assemble publishToMavenLocal
           find ~/.m2/repository/ -type f -name "maven-metadata-local.xml" -execdir mv {} maven-metadata.xml \;
 
       - name: Upload Updated Artifacts to S3
