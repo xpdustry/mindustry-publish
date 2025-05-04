@@ -61,6 +61,7 @@ dependencies {
 
 ## Supported versions
 
+- v149
 - v148
 - v147
 - v146
