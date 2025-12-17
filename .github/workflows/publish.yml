@@ -45,20 +45,20 @@ jobs:
           export PATH=$PATH:$HOME/minio-binaries/
 
           bash +o history
-          mc alias set xpdustry https://minio1.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+          mc alias set xpdustry https://storage.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
           bash -o history
           
-          for object in $(mc ls -r xpdustry/maven-anuken-releases/com/github/Anuken/Mindustry | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
+          for object in $(mc ls -r xpdustry/mvn-mindustry/com/github/Anuken/Mindustry | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
           do
             mkdir -p ~/.m2/repository/com/github/Anuken/Mindustry/"$(dirname "$object")"
-            mc cp xpdustry/maven-anuken-releases/com/github/Anuken/Mindustry/"$object" \
+            mc cp xpdustry/mvn-mindustry/com/github/Anuken/Mindustry/"$object" \
               "$HOME"/.m2/repository/com/github/Anuken/Mindustry/"$(dirname "$object")"/maven-metadata-local.xml
           done
 
-          for object in $(mc ls -r xpdustry/maven-anuken-releases/com/github/Anuken/Arc | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
+          for object in $(mc ls -r xpdustry/mvn-mindustry/com/github/Anuken/Arc | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
           do
             mkdir -p ~/.m2/repository/com/github/Anuken/Arc/"$(dirname "$object")"
-            mc cp xpdustry/maven-anuken-releases/com/github/Anuken/Arc/"$object" \
+            mc cp xpdustry/mvn-mindustry/com/github/Anuken/Arc/"$object" \
               "$HOME"/.m2/repository/com/github/Anuken/Arc/"$(dirname "$object")"/maven-metadata-local.xml
           done
         env:
@@ -92,7 +92,7 @@ jobs:
           export PATH=$PATH:$HOME/minio-binaries/
 
           bash +o history
-          mc alias set xpdustry https://minio1.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+          mc alias set xpdustry https://storage.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
           bash -o history
 
           find ~/.m2/repository/ -type f -not -name "*.md5" -not -name "*.sha1" -not -name "*.sha256" -not -name "*.sha512" | while read -r file; do
@@ -104,7 +104,7 @@ jobs:
           done
 
           # Upload the updated artifacts to S3
-          mc cp -r ~/.m2/repository/* xpdustry/maven-anuken-releases/
+          mc cp -r ~/.m2/repository/* xpdustry/mvn-mindustry/
         env:
           MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
           MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
