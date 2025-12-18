@@ -1,7 +1,7 @@
 # mindustry-publish
 
-[![Xpdustry latest](https://maven.xpdustry.com/api/badge/latest/mindustry/com/github/Anuken/Mindustry/core?color=008080&name=Mindustry)](https://maven.xpdustry.com/#/mindustry/com/github/Anuken/Mindustry/core)
-[![Mindustry 7.0 | 8.0](https://img.shields.io/badge/Mindustry-7.0%7C8.0-008080)](https://github.com/Anuken/Mindustry/releases)
+[![Xpdustry latest](https://maven.xpdustry.com/api/badge/latest/mindustry/com/github/Anuken/Mindustry/core?color=008080&name=Latest)](https://maven.xpdustry.com/#/mindustry/com/github/Anuken/Mindustry/core)
+[![Mindustry 7.0 | 8.0](https://img.shields.io/badge/Mindustry-7.0%20%7C%208.0-008080)](https://github.com/Anuken/Mindustry/releases)
 
 ## Description
 
@@ -13,9 +13,10 @@ Fortunatly, **mindustry-publish** solves this.
 
 ## How does it work ?
 
-We simply compile Mindustry, Arc and Rhino ourselves with a Github Action, since they don't have tight restrictions like Jitpack.
-Then the resulting jar artifacts are uploaded to our [S3 server](https://minio.xpdustry.com),
-and served by our [maven repository](https://maven.xpdustry.com) via the [mindustry](https://maven.xpdustry.com/#/mindustry) repository.
+We simply compile Mindustry, Arc and Rhino ourselves with a Github Action,
+since they don't have tight restrictions like Jitpack.
+Then the resulting artifacts are uploaded to our S3 server (`https://storage.xpdustry.com`).
+And finally, served by our [maven repository](https://maven.xpdustry.com/#/mindustry).
 
 ## How to use it ?
 
@@ -46,16 +47,16 @@ That's it! And no need to modify your dependency declarations:
 ```groovy
 // Groovy
 dependencies {
-    implementation "com.github.Anuken.Mindustry:core:v148"
-    // implementation "com.github.Anuken.Mindustry:server:v148"
+    implementation "com.github.Anuken.Mindustry:core:v154"
+    // implementation "com.github.Anuken.Mindustry:server:v154"
 }
 ```
 
 ```kt
 // Kotlin
 dependencies {
-    implementation("com.github.Anuken.Mindustry:core:v148")
-    // implementation("com.github.Anuken.Mindustry:server:v148")
+    implementation("com.github.Anuken.Mindustry:core:v154")
+    // implementation("com.github.Anuken.Mindustry:server:v154")
 }
 ```
 
@@ -81,3 +82,5 @@ dependencies {
 - v147
 - v146
 - v145
+
+> Also check out [MindustryRepo](https://github.com/Zelaux/MindustryRepo/tree/master).
