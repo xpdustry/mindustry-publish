@@ -7,8 +7,15 @@ on:
         required: true
         description: The reference or tag
       java:
-        required: true
+        required: false
         description: The build java version
+        default: "17"
+      mindustry_ref:
+        required: false
+        description: Custom commit/ref for Mindustry (defaults to version)
+      arc_ref:
+        required: false
+        description: Custom commit/ref for Arc (defaults to version)
 
 jobs:
   publish:
@@ -25,14 +32,14 @@ jobs:
         uses: actions/checkout@v4
         with:
           repository: 'Anuken/Mindustry'
-          ref: ${{ github.event.inputs.version }}
+          ref: ${{ github.event.inputs.mindustry_ref || github.event.inputs.version }}
           path: Mindustry
 
       - name: Checkout Arc
         uses: actions/checkout@v4
         with:
           repository: 'Anuken/Arc'
-          ref: ${{ github.event.inputs.version }}
+          ref: ${{ github.event.inputs.arc_ref || github.event.inputs.version }}
           path: Arc
 
       - name: Install and Setup Minio CLI
@@ -70,16 +77,19 @@ jobs:
           VERSION: ${{ github.event.inputs.version }}
         run: |
           export JITPACK=true
+          
           cd ./Arc
           sed -i "s/group = 'com.github.Anuken'/group = 'com.github.Anuken.Arc'/" build.gradle
           sed -i "s/version = '1.0'/version = '$VERSION'/" build.gradle
           sed -i '/withJavadocJar()/s/^/\/\/ /' build.gradle
           ./gradlew -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -xtest assemble publishToMavenLocal
+          
           cd ../Mindustry
           sed -i "s/group = 'com.github.Anuken'/group = 'com.github.Anuken.Mindustry'/" build.gradle
           sed -i "s/^archash=.*/archash=$VERSION/" gradle.properties
           sed -i '/withJavadocJar()/s/^/\/\/ /' build.gradle
           ./gradlew -PpackageVersion="$VERSION" -Dfile.encoding=UTF-8 -Dhttps.protocols=TLSv1.2 -Prelease -xtest assemble publishToMavenLocal
+          
           find ~/.m2/repository/ -type f -name "maven-metadata-local.xml" -execdir mv {} maven-metadata.xml \;
 
       - name: Upload Updated Artifacts to S3
