@@ -67,6 +67,7 @@ dependencies {
 
 ## Supported versions
 
+- v155.4
 - v155.3
 - v155.2
 - v155.1
