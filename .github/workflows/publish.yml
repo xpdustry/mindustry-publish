@@ -52,25 +52,27 @@ jobs:
           export PATH=$PATH:$HOME/minio-binaries/
 
           bash +o history
-          mc alias set xpdustry https://storage.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+          mc alias set xpdustry $S3_ENDPOINT $S3_ACCESS_KEY $S3_SECRET_KEY
           bash -o history
           
-          for object in $(mc ls -r xpdustry/mvn-mindustry/com/github/Anuken/Mindustry | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
+          for object in $(mc ls -r xpdustry/$S3_BUCKET/com/github/Anuken/Mindustry | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
           do
             mkdir -p ~/.m2/repository/com/github/Anuken/Mindustry/"$(dirname "$object")"
-            mc cp xpdustry/mvn-mindustry/com/github/Anuken/Mindustry/"$object" \
+            mc cp xpdustry/$S3_BUCKET/com/github/Anuken/Mindustry/"$object" \
               "$HOME"/.m2/repository/com/github/Anuken/Mindustry/"$(dirname "$object")"/maven-metadata-local.xml
           done
 
-          for object in $(mc ls -r xpdustry/mvn-mindustry/com/github/Anuken/Arc | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
+          for object in $(mc ls -r xpdustry/$S3_BUCKET/com/github/Anuken/Arc | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
           do
             mkdir -p ~/.m2/repository/com/github/Anuken/Arc/"$(dirname "$object")"
-            mc cp xpdustry/mvn-mindustry/com/github/Anuken/Arc/"$object" \
+            mc cp xpdustry/$S3_BUCKET/com/github/Anuken/Arc/"$object" \
               "$HOME"/.m2/repository/com/github/Anuken/Arc/"$(dirname "$object")"/maven-metadata-local.xml
           done
         env:
-          MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
-          MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
+          S3_ENDPOINT: "${{ secrets.S3_ENDPOINT }}"
+          S3_BUCKET: "${{ secrets.S3_BUCKET }}"
+          S3_ACCESS_KEY: "${{ secrets.S3_ACCESS_KEY }}"
+          S3_SECRET_KEY: "${{ secrets.S3_SECRET_KEY }}"
 
       - name: Build and Install Mindustry and Arc
         env:
@@ -103,7 +105,7 @@ jobs:
           export PATH=$PATH:$HOME/minio-binaries/
 
           bash +o history
-          mc alias set xpdustry https://storage.xpdustry.com $MINIO_ACCESS_KEY $MINIO_SECRET_KEY
+          mc alias set xpdustry $S3_ENDPOINT $S3_ACCESS_KEY $S3_SECRET_KEY
           bash -o history
 
           find ~/.m2/repository/ -type f -not -name "*.md5" -not -name "*.sha1" -not -name "*.sha256" -not -name "*.sha512" | while read -r file; do
@@ -115,7 +117,9 @@ jobs:
           done
 
           # Upload the updated artifacts to S3
-          mc cp -r ~/.m2/repository/* xpdustry/mvn-mindustry/
+          mc cp -r ~/.m2/repository/* xpdustry/$S3_BUCKET/
         env:
-          MINIO_ACCESS_KEY: "${{ secrets.MINIO_ACCESS_KEY }}"
-          MINIO_SECRET_KEY: "${{ secrets.MINIO_SECRET_KEY }}"
+          S3_ENDPOINT: "${{ secrets.S3_ENDPOINT }}"
+          S3_BUCKET: "${{ secrets.S3_BUCKET }}"
+          S3_ACCESS_KEY: "${{ secrets.S3_ACCESS_KEY }}"
+          S3_SECRET_KEY: "${{ secrets.S3_SECRET_KEY }}"

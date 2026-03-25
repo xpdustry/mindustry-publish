@@ -15,7 +15,7 @@ Fortunatly, **mindustry-publish** solves this.
 
 We simply compile Mindustry, Arc and Rhino ourselves with a Github Action,
 since they don't have tight restrictions like Jitpack.
-Then the resulting artifacts are uploaded to our S3 server (`https://storage.xpdustry.com`).
+Then the resulting artifacts are uploaded to our S3 server.
 And finally, served by our [maven repository](https://maven.xpdustry.com/#/mindustry).
 
 ## How to use it ?
@@ -67,6 +67,7 @@ dependencies {
 
 ## Supported versions
 
+- v156 (using commit https://github.com/Anuken/Mindustry/commit/094af9280fb70b722accca8a60b7c1424feafa5e)
 - v155.4
 - v155.3
 - v155.2
@@ -89,4 +90,4 @@ dependencies {
 - v146
 - v145
 
-> Also check out [MindustryRepo](https://github.com/Zelaux/MindustryRepo/tree/master).
+> Also check out [MindustryRepo](https://github.com/Zelaux/MindustryRepo).
