@@ -67,6 +67,7 @@ dependencies {
 
 ## Supported versions
 
+- v156.1
 - v156 (using commit https://github.com/Anuken/Mindustry/commit/094af9280fb70b722accca8a60b7c1424feafa5e)
 - v155.4
 - v155.3
