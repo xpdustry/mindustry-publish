@@ -11,6 +11,22 @@ All you need to do is creating a very small yaml file in your project and Jitpac
 For Mindustry, it was great, until the git repository of Mindustry grew past 2GB. Jitpacks now always fails to process Mindustry.
 Fortunatly, **mindustry-publish** solves this.
 
+| Supported versions |
+| :--- |
+| v157, v157.1, v157.2 |
+| v156, v156.1, v156.2 |
+| v155, v155.1, v155.2, v155.3, v155.4 |
+| v154, v154.2, v154.3 |
+| v153 |
+| v152, v152.1, v152.2 |
+| v151, v151.1 |
+| v150, v150.1 |
+| v149 |
+| v148 |
+| v147 |
+| v146 |
+| v145 |
+
 ## How does it work ?
 
 We simply compile Mindustry, Arc and Rhino ourselves with a Github Action,
@@ -64,34 +80,5 @@ dependencies {
 > 
 > The Maven repository does not provide any other library rewritten by Anuke apart Rhino.
 > Thus if you want to use [Anuken's steamworks4j](https://github.com/Anuken/steamworks4j), you will have to comeback to Jitpack.
-
-## Supported versions
-
-- v157.1
-- v157
-- v156.2
-- v156.1
-- v156 (using commit https://github.com/Anuken/Mindustry/commit/094af9280fb70b722accca8a60b7c1424feafa5e)
-- v155.4
-- v155.3
-- v155.2
-- v155.1
-- v155
-- v154.3
-- v154.2
-- v154
-- v153
-- v152.2
-- v152.1
-- v152
-- v151.1
-- v151
-- v150.1
-- v150
-- v149
-- v148
-- v147
-- v146
-- v145
 
 > Also check out [MindustryRepo](https://github.com/Zelaux/MindustryRepo).
