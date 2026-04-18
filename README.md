@@ -13,7 +13,7 @@ Fortunatly, **mindustry-publish** solves this.
 
 | Supported versions |
 | :--- |
-| v157, v157.1, v157.2 |
+| v157, v157.1, v157.2, v157.3 |
 | v156, v156.1, v156.2 |
 | v155, v155.1, v155.2, v155.3, v155.4 |
 | v154, v154.2, v154.3 |
@@ -76,7 +76,7 @@ dependencies {
 }
 ```
 
-> **Warning**
+> [!Note]
 > 
 > The Maven repository does not provide any other library rewritten by Anuke apart Rhino.
 > Thus if you want to use [Anuken's steamworks4j](https://github.com/Anuken/steamworks4j), you will have to comeback to Jitpack.
