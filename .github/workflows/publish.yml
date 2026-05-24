@@ -23,20 +23,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Set up JDK
-        uses: actions/setup-java@v3
+        uses: actions/setup-java@17f84c3641ba7b8f6deff6309fc4c864478f5d62 # v3
         with:
           java-version: ${{ github.event.inputs.java }}
           distribution: 'temurin'
 
       - name: Checkout Mindustry
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           repository: 'Anuken/Mindustry'
           ref: ${{ github.event.inputs.mindustry_ref || github.event.inputs.version }}
           path: Mindustry
 
       - name: Checkout Arc
-        uses: actions/checkout@v4
+        uses: actions/checkout@34e114876b0b11c390a56381ad16ebd13914f8d5 # v4
         with:
           repository: 'Anuken/Arc'
           ref: ${{ github.event.inputs.arc_ref || github.event.inputs.version }}
