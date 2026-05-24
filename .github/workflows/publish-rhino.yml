@@ -30,7 +30,7 @@ jobs:
 
       - name: Install and Setup Minio CLI
         run: |
-          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+          curl -fL https://dl.min.io/client/mc/release/linux-amd64/mc \
             --create-dirs \
             -o $HOME/minio-binaries/mc
 
@@ -72,7 +72,7 @@ jobs:
 
       - name: Upload Updated Artifacts to S3
         run: |
-          curl https://dl.min.io/client/mc/release/linux-amd64/mc \
+          curl -fL https://dl.min.io/client/mc/release/linux-amd64/mc \
             --create-dirs \
             -o $HOME/minio-binaries/mc
 
