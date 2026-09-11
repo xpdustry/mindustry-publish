@@ -13,6 +13,7 @@ Fortunatly, **mindustry-publish** solves this.
 
 | Supported versions |
 | :--- |
+| v160, v160.1 |
 | v159, v159.1, v159.2, v159.3, v159.5, v159.6, v159.7 |
 | v158, v158.1 |
 | v157, v157.1, v157.2, v157.3 |
