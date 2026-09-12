@@ -22,6 +22,9 @@ jobs:
     name: Publish Mindustry and Arc
     runs-on: ubuntu-latest
     steps:
+      - name: Checkout publisher
+        uses: actions/checkout@9c091bb21b7c1c1d1991bb908d89e4e9dddfe3e0 # v7
+
       - name: Set up JDK
         uses: actions/setup-java@0f481fcb613427c0f801b606911222b5b6f3083a # v5
         with:
@@ -42,32 +45,14 @@ jobs:
           ref: ${{ github.event.inputs.arc_ref || github.event.inputs.version }}
           path: Arc
 
-      - name: Install and Setup Minio CLI
+      - name: Install publisher dependencies
+        run: python3 -m pip install --requirement requirements.txt
+
+      - name: Restore Maven metadata
         run: |
-          curl -fL https://dl.min.io/client/mc/release/linux-amd64/mc \
-            --create-dirs \
-            -o $HOME/minio-binaries/mc
-
-          chmod +x $HOME/minio-binaries/mc
-          export PATH=$PATH:$HOME/minio-binaries/
-
-          bash +o history
-          mc alias set xpdustry $S3_ENDPOINT $S3_ACCESS_KEY $S3_SECRET_KEY
-          bash -o history
-          
-          for object in $(mc ls -r xpdustry/$S3_BUCKET/com/github/Anuken/Mindustry | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
-          do
-            mkdir -p ~/.m2/repository/com/github/Anuken/Mindustry/"$(dirname "$object")"
-            mc cp xpdustry/$S3_BUCKET/com/github/Anuken/Mindustry/"$object" \
-              "$HOME"/.m2/repository/com/github/Anuken/Mindustry/"$(dirname "$object")"/maven-metadata-local.xml
-          done
-
-          for object in $(mc ls -r xpdustry/$S3_BUCKET/com/github/Anuken/Arc | grep -E 'maven-metadata\.xml$' | awk '{print $6}')
-          do
-            mkdir -p ~/.m2/repository/com/github/Anuken/Arc/"$(dirname "$object")"
-            mc cp xpdustry/$S3_BUCKET/com/github/Anuken/Arc/"$object" \
-              "$HOME"/.m2/repository/com/github/Anuken/Arc/"$(dirname "$object")"/maven-metadata-local.xml
-          done
+          python3 scripts/s3_repository.py download-metadata "$HOME/.m2/repository" \
+            com/github/Anuken/Mindustry \
+            com/github/Anuken/Arc
         env:
           S3_ENDPOINT: "${{ secrets.S3_ENDPOINT }}"
           S3_BUCKET: "${{ secrets.S3_BUCKET }}"
@@ -96,28 +81,7 @@ jobs:
           find ~/.m2/repository/ -type f -name "maven-metadata-local.xml" -execdir mv {} maven-metadata.xml \;
 
       - name: Upload Updated Artifacts to S3
-        run: |
-          curl -fL https://dl.min.io/client/mc/release/linux-amd64/mc \
-            --create-dirs \
-            -o $HOME/minio-binaries/mc
-
-          chmod +x $HOME/minio-binaries/mc
-          export PATH=$PATH:$HOME/minio-binaries/
-
-          bash +o history
-          mc alias set xpdustry $S3_ENDPOINT $S3_ACCESS_KEY $S3_SECRET_KEY
-          bash -o history
-
-          find ~/.m2/repository/ -type f -not -name "*.md5" -not -name "*.sha1" -not -name "*.sha256" -not -name "*.sha512" | while read -r file; do
-            echo "Generating hashes for $file"
-            md5sum "$file" | awk '{print $1}' | tr -d '\n' > "${file}.md5"
-            sha1sum "$file" | awk '{print $1}' | tr -d '\n' > "${file}.sha1"
-            sha256sum "$file" | awk '{print $1}' | tr -d '\n' > "${file}.sha256"
-            sha512sum "$file" | awk '{print $1}' | tr -d '\n' > "${file}.sha512"
-          done
-
-          # Upload the updated artifacts to S3
-          mc cp -r ~/.m2/repository/* xpdustry/$S3_BUCKET/
+        run: python3 scripts/s3_repository.py upload "$HOME/.m2/repository"
         env:
           S3_ENDPOINT: "${{ secrets.S3_ENDPOINT }}"
           S3_BUCKET: "${{ secrets.S3_BUCKET }}"
