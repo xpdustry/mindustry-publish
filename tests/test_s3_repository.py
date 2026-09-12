@@ -65,6 +65,31 @@ class RepositoryTest(unittest.TestCase):
             )
             self.assertEqual(restored_metadata.read_text(), "<metadata />")
 
+    def test_rhino_metadata_restore(self):
+        with tempfile.TemporaryDirectory() as directory:
+            repository = Path(directory) / "repository"
+            metadata = repository / "com/github/Anuken/rhino/maven-metadata.xml"
+            artifact = repository / "com/github/Anuken/rhino/test/rhino-test.jar"
+            artifact.parent.mkdir(parents=True)
+            artifact.write_bytes(b"rhino")
+            metadata.parent.mkdir(parents=True, exist_ok=True)
+            metadata.write_text("<rhino />", encoding="utf-8")
+
+            upload_repository(self.client, self.bucket, repository)
+
+            restored = Path(directory) / "restored"
+            downloaded = download_metadata(
+                self.client,
+                self.bucket,
+                restored,
+                ["com/github/Anuken/rhino"],
+            )
+            self.assertEqual(downloaded, 1)
+            restored_metadata = (
+                restored / "com/github/Anuken/rhino/maven-metadata-local.xml"
+            )
+            self.assertEqual(restored_metadata.read_text(), "<rhino />")
+
 
 if __name__ == "__main__":
     unittest.main()
