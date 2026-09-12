@@ -3,6 +3,7 @@ import hashlib
 import logging
 import os
 from collections.abc import Iterable
+from concurrent.futures import ThreadPoolExecutor, as_completed
 from pathlib import Path, PurePosixPath
 
 import boto3
@@ -79,7 +80,7 @@ def write_checksums(path: Path) -> None:
         )
 
 
-def upload_repository(client, bucket: str, repository: Path) -> int:
+def upload_repository(client, bucket: str, repository: Path, workers: int = 16) -> int:
     source_files = [
         path for path in repository_files(repository) if not is_checksum(path)
     ]
@@ -87,13 +88,22 @@ def upload_repository(client, bucket: str, repository: Path) -> int:
         LOG.info("Checksumming %s", path.relative_to(repository))
         write_checksums(path)
 
-    count = 0
-    for path in repository_files(repository):
-        key = path.relative_to(repository).as_posix()
-        LOG.info("Uploading s3://%s/%s", bucket, key)
-        client.upload_file(str(path), bucket, key)
-        count += 1
-    return count
+    files = list(repository_files(repository))
+    with ThreadPoolExecutor(max_workers=workers) as executor:
+        uploads = {
+            executor.submit(
+                client.upload_file,
+                str(path),
+                bucket,
+                path.relative_to(repository).as_posix(),
+            ): path
+            for path in files
+        }
+        for upload in as_completed(uploads):
+            path = uploads[upload]
+            upload.result()
+            LOG.info("Uploaded s3://%s/%s", bucket, path.relative_to(repository))
+    return len(files)
 
 
 def parse_args() -> argparse.Namespace:
@@ -109,6 +119,7 @@ def parse_args() -> argparse.Namespace:
 
     upload = subparsers.add_parser("upload")
     upload.add_argument("repository", type=Path)
+    upload.add_argument("--workers", type=int, default=16)
 
     args = parser.parse_args()
     if not args.bucket:
@@ -127,7 +138,9 @@ def main() -> None:
     else:
         if not args.repository.is_dir():
             raise SystemExit(f"Repository does not exist: {args.repository}")
-        count = upload_repository(client, args.bucket, args.repository)
+        if args.workers < 1:
+            raise SystemExit("--workers must be at least 1")
+        count = upload_repository(client, args.bucket, args.repository, args.workers)
         LOG.info("Uploaded %d repository files", count)
 
 
